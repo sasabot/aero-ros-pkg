@@ -103,6 +103,7 @@ bool TorsoKinematics(aero_startup::AeroTorsoController::Request &req,
   res.status = "success";
   res.x = x_now - x_origin;
   res.z = z_now - z_origin;
+  res.time = time_scale;
   return true;
 };
 
