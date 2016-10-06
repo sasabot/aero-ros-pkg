@@ -11,7 +11,7 @@
   string status
   float64 x
   float64 z
-  float64 time
+  float64 time_sec
 */
 
 static const double link1_length = 290.09;
@@ -103,7 +103,7 @@ bool TorsoKinematics(aero_startup::AeroTorsoController::Request &req,
   res.status = "success";
   res.x = x_now - x_origin;
   res.z = z_now - z_origin;
-  res.time = time_scale;
+  res.time_sec = time_scale;
   return true;
 };
 
