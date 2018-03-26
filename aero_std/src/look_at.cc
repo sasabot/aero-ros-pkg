@@ -44,6 +44,8 @@ public: LookAt(ros::NodeHandle _nh, aero::interface::AeroMoveitInterfacePtr _rob
   map_coordinate_ = false;
   sneak_ = false;
   p0_ = Eigen::Vector3d(0.0, 0.0, 0.0);
+
+  factor_ = 1.0;
 };
 
 public: ~LookAt() {};
@@ -72,19 +74,40 @@ private: void SetTarget(const std_msgs::String &_msg) {
   sneak_ = (_msg.data == "/look_at/manager_disabled" ? true : false);
 };
 
+private: std::tuple<double, double, double> getNeck() {
+  return std::tuple<double, double, double>(
+      robot_->kinematic_state->getVariablePosition("neck_r_joint"),
+      robot_->kinematic_state->getVariablePosition("neck_p_joint"),
+      robot_->kinematic_state->getVariablePosition("neck_y_joint"));
+};
+
+private: void sendNeckAsync(std::tuple<double, double, double> _from) {
+  auto to = getNeck();
+  double yaw_vel =
+    robot_->kinematic_model->getVariableBounds("neck_y_joint").max_velocity_;
+  double pitch_vel =
+    robot_->kinematic_model->getVariableBounds("neck_p_joint").max_velocity_;
+  double time = std::max((std::get<2>(_from) - std::get<2>(to)) / yaw_vel,
+                         (std::get<1>(_from) - std::get<1>(to)) / pitch_vel);
+  robot_->sendNeckAsync(1000 * time + 100);
+};
+
 private: void Callback(const geometry_msgs::Point::ConstPtr &_msg) {
+  std::tuple<double, double, double> from;
   if (map_coordinate_) {
     // get robot position in map
     Eigen::Vector3d vec_in_base =
       robot_->volatileTransformToBase(_msg->x, _msg->y, _msg->z);
     robot_->setRobotStateToCurrentState();
+    from = getNeck();
     robot_->setLookAt(vec_in_base);
   } else {
     robot_->setRobotStateToCurrentState();
+    from = getNeck();
     robot_->setLookAt(_msg->x, _msg->y, _msg->z);
   }
   if (factor_ > 0.000001)
-    robot_->sendNeckAsync(2000 * factor_);
+    sendNeckAsync(from);
 };
 
 private: void SetRPY(const geometry_msgs::Point::ConstPtr &_msg) {
@@ -93,10 +116,12 @@ private: void SetRPY(const geometry_msgs::Point::ConstPtr &_msg) {
   thread_alive_mutex_.unlock();
   sub_.shutdown();
   sneak_ = false;
+  robot_->setRobotStateToCurrentState();
+  auto from = getNeck();
   ROS_INFO("SetRPY: setting neck to %f %f %f", _msg->x, _msg->y, _msg->z);
   robot_->setNeck(_msg->x, _msg->y, _msg->z);
   if (factor_ > 0.000001)
-    robot_->sendNeckAsync(2000 * factor_);
+    sendNeckAsync(from);
 };
 
 private: void SetStaticBase(const geometry_msgs::Point::ConstPtr &_msg) {
@@ -169,7 +194,7 @@ private: void CreateThread
         geometry_msgs::Point msg;
         msg.x = _x; msg.y = _y; msg.z = _z;
         pub.publish(msg);
-        usleep(800 * 1000);
+        usleep(200 * 1000);
         thread_alive_mutex_.lock();
         thread_kill = target_thread_kill_;
         thread_alive_mutex_.unlock();

@@ -388,7 +388,7 @@ bool aero::interface::AeroMoveitInterface::lifter_ik_(double _x, double _z, std:
 }
 
 //////////////////////////////////////////////////
-void aero::interface::AeroMoveitInterface::setLookAt(double _x, double _y, double _z, bool _map_coordinate, bool _tracking)
+void aero::interface::AeroMoveitInterface::setLookAt(double _x, double _y, double _z, bool _map_coordinate, bool _tracking, bool _record_topic)
 {
   ROS_INFO("setTrackingMode is %d in setLookAt, looking for %f %f %f in %s",
            static_cast<int>(tracking_mode_flag_), _x, _y, _z,
@@ -402,16 +402,18 @@ void aero::interface::AeroMoveitInterface::setLookAt(double _x, double _y, doubl
 
     if (_map_coordinate) {
       if (_tracking) {
-        previous_topic_ = "/look_at/target/map:"
-          + std::to_string(_x) + "," + std::to_string(_y) + "," + std::to_string(_z);
+        if (_record_topic)
+          previous_topic_ = "/look_at/target/map:"
+            + std::to_string(_x) + "," + std::to_string(_y) + "," + std::to_string(_z);
         look_at_publisher_map_.publish(msg);
       } else {
         look_at_publisher_map_static_.publish(msg);
       }
     } else {
       if (_tracking) {
-        previous_topic_ = "/look_at/target:"
-          + std::to_string(_x) + "," + std::to_string(_y) + "," + std::to_string(_z);
+        if (_record_topic)
+          previous_topic_ = "/look_at/target:"
+            + std::to_string(_x) + "," + std::to_string(_y) + "," + std::to_string(_z);
         look_at_publisher_base_.publish(msg);
       } else {
         look_at_publisher_base_static_.publish(msg);
@@ -424,21 +426,21 @@ void aero::interface::AeroMoveitInterface::setLookAt(double _x, double _y, doubl
 }
 
 //////////////////////////////////////////////////
-void aero::interface::AeroMoveitInterface::setLookAt(Eigen::Vector3d _target, bool _map_coordinate, bool _tracking)
+void aero::interface::AeroMoveitInterface::setLookAt(Eigen::Vector3d _target, bool _map_coordinate, bool _tracking, bool _record_topic)
 {
-  setLookAt(_target.x(), _target.y(), _target.z(), _map_coordinate, _tracking);
+  setLookAt(_target.x(), _target.y(), _target.z(), _map_coordinate, _tracking, _record_topic);
 }
 
 //////////////////////////////////////////////////
-void aero::interface::AeroMoveitInterface::setLookAt(Eigen::Vector3f _target, bool _map_coordinate, bool _tracking)
+void aero::interface::AeroMoveitInterface::setLookAt(Eigen::Vector3f _target, bool _map_coordinate, bool _tracking, bool _record_topic)
 {
-  setLookAt(static_cast<double>(_target.x()), static_cast<double>(_target.y()), static_cast<double>(_target.z()), _map_coordinate, _tracking);
+  setLookAt(static_cast<double>(_target.x()), static_cast<double>(_target.y()), static_cast<double>(_target.z()), _map_coordinate, _tracking, _record_topic);
 }
 
 //////////////////////////////////////////////////
-void aero::interface::AeroMoveitInterface::setLookAt(geometry_msgs::Pose _pose, bool _map_coordinate, bool _tracking)
+void aero::interface::AeroMoveitInterface::setLookAt(geometry_msgs::Pose _pose, bool _map_coordinate, bool _tracking, bool _record_topic)
 {
-  setLookAt(_pose.position.x, _pose.position.y, _pose.position.z, _map_coordinate, _tracking);
+  setLookAt(_pose.position.x, _pose.position.y, _pose.position.z, _map_coordinate, _tracking, _record_topic);
 }
 
 //////////////////////////////////////////////////
