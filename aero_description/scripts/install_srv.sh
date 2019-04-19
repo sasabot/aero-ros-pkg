@@ -12,17 +12,18 @@ if [[ $(find $(rospack find aero_description)/../aero_startup -name "CMakeLists.
 then
     cp $(rospack find aero_description)/../aero_startup/.templates/CMakeLists.template $cmake_file
 else
-    echo "clean CMakeLists.txt? y or n"
-    read answer
-    case $answer in
-	y)
-	    cp $(rospack find aero_description)/../aero_startup/.templates/CMakeLists.template $cmake_file
-	    echo "cleaned"
-	    ;;
-	*)
-	    echo "overwriting without cleaning"
-	    ;;
-    esac
+    echo "cleaning CMakeLists.txt"
+    # echo "clean CMakeLists.txt? y or n"
+    # read answer
+    # case $answer in
+    #     y)
+    #         cp $(rospack find aero_description)/../aero_startup/.templates/CMakeLists.template $cmake_file
+    #         echo "cleaned"
+    #         ;;
+    #     *)
+    #         echo "overwriting without cleaning"
+    #         ;;
+    # esac
 fi
 
 echo "done."
