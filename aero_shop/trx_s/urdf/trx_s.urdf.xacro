@@ -151,7 +151,7 @@
     <child  link="${prefix}_indexmid_link"/>
     <origin xyz="0 ${0.028754 * reflect} -0.034615" rpy="0 -0 0 "/>
     <axis   xyz="1 0 0"/>
-    <limit lower="-3.14159" upper="3.14159" effort="100" velocity="0.5" />
+    <limit lower="-0.001" upper="0.001" effort="100" velocity="0.5" />
     <dynamics damping="0.2" friction="0" />
   </joint>
   <!--xacro:gazebo_joint_reference joint_name="${prefix}_indexmid_joint" /-->
@@ -161,7 +161,7 @@
     <child  link="${prefix}_indexend_link"/>
     <origin xyz="0 ${0.021716 * reflect} -0.013357" rpy="0 -0 0 "/>
     <axis   xyz="1 0 0"/>
-    <limit lower="-3.14159" upper="3.14159" effort="100" velocity="0.5" />
+    <limit lower="-0.001" upper="0.001" effort="100" velocity="0.5" />
     <dynamics damping="0.2" friction="0" />
   </joint>
   <!--xacro:gazebo_joint_reference joint_name="${prefix}_indexend_joint" /-->
