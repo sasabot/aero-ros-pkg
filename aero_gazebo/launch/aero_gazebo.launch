@@ -6,6 +6,7 @@
   <arg name="HEADLESS" default="false"/>
   <arg name="PAUSED"   default="false"/>
   <arg name="WORLD_FILE" default="$(find aero_gazebo)/world/aero_shelf.world"/>
+  <arg name="VERBOSE" default="true">
   <arg name="use_sim_time" default="true"/>
   <arg name="debug" default="false"/>
 
@@ -15,6 +16,7 @@
   <include file="$(find gazebo_ros)/launch/empty_world.launch" >
     <arg name="world_name" value="$(arg WORLD_FILE)"/>
     <arg name="gui"    value="$(arg GUI)" />
+    <arg name="verbose" value="$(arg VERBOSE)"/>
     <arg name="paused" value="$(arg PAUSED)"/>
     <arg name="headless" value="$(arg HEADLESS)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
