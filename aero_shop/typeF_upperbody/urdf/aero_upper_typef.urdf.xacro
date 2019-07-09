@@ -497,7 +497,7 @@
     <origin xyz="0 0 -0.1955" rpy="0 -0 0 "/>
     <axis   xyz="0 1 0"/>
     <!-- from -5 to 5 degrees-->
-    <limit lower="-0.087" upper="0.087" effort="100" velocity="0.9" />
+    <limit lower="-0.017" upper="0.017" effort="100" velocity="0.9" />
     <dynamics damping="0.2" friction="0" />
   </joint>
   <xacro:gazebo_transmission joint_name="l_wrist_p_joint" />
@@ -607,7 +607,7 @@
     <origin xyz="0 0 -0.1955" rpy="0 -0 0 "/>
     <axis   xyz="0 1 0"/>
     <!-- from -5 to 5 degrees-->
-    <limit lower="-0.087" upper="0.087" effort="100" velocity="0.9" />
+    <limit lower="-0.017" upper="0.017" effort="100" velocity="0.9" />
     <dynamics damping="0.2" friction="0" />
   </joint>
   <xacro:gazebo_transmission joint_name="r_wrist_p_joint" />
